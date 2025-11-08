@@ -17,31 +17,15 @@
 
       <!-- 表格操作栏：编辑、定时上下架 -->
       <template #operation="scope">
-        <el-button type="primary" link :icon="EditPen" v-hasPermi="['sys:product:edit']" @click="openDrawer('编辑', scope.row)">编辑</el-button>
-        <el-button
-          type="success"
-          link
-          :icon="Check"
-          v-hasPermi="['sys:product:up']"
-          @click="openStateDialog({ title: '商品定时上架', row: scope.row })"
-          v-if="scope.row.status !== 1"
-          >商品上架</el-button
-        >
-        <el-button
-          type="danger"
-          link
-          :icon="Bottom"
-          v-hasPermi="['sys:product:down']"
-          @click="openStateDialog({ title: '商品定时下架', row: scope.row })"
-          v-if="scope.row.status === 1"
-          >商品下架</el-button
-        >
+        <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
+        <el-button type="success" link :icon="Check" @click="openStateDialog('商品定时上架', scope.row)" v-if="scope.row.status !== 1">商品上架</el-button>
+        <el-button type="danger" link :icon="Bottom" @click="openStateDialog('商品定时下架', scope.row)" v-if="scope.row.status === 1">商品下架</el-button>
       </template>
     </ProTable>
 
     <!-- 商品新增/编辑弹窗 -->
     <ProductDialog ref="dialogRef" />
-    <!-- 定时上下架弹窗 -->
+    <!-- 定时上下架弹窗：使用重命名后的组件 -->
     <ProductStateDialog ref="stateDialogRef" />
   </div>
 </template>
@@ -52,21 +36,24 @@ import { ColumnProps } from '@/components/ProTable/interface'
 import ProTable from '@/components/ProTable/index.vue'
 import { ProductStatusList } from '@/configs/enum'
 import { ProductApi } from '@/api/modules/product'
-import { Bottom, CirclePlus, EditPen, Check } from '@element-plus/icons-vue'
+import { Bottom, Check, CirclePlus, EditPen } from '@element-plus/icons-vue'
 import ProductDialog from './components/ProductDialog.vue'
+// 导入重命名后的定时上下架弹窗
 import ProductStateDialog from './components/ProductStateDialog.vue'
 
-// 表格实例
-const proTable = ref()
+// 定义与 ref 同名的变量
+const proTable = ref<InstanceType<typeof ProTable>>()
+
+// 必须通过 defineExpose 暴露 proTable
+defineExpose({
+  proTable
+})
 // 弹窗实例
 const dialogRef = ref()
 const stateDialogRef = ref()
 
-// 初始化参数（默认查询未删除商品）
-const initParam = reactive({
-  deleteFlag: 0
-})
-// const initParam = reactive({})
+// 初始化参数
+const initParam = reactive({})
 
 // 表格数据处理
 const dataCallback = (data: any) => {
@@ -76,14 +63,14 @@ const dataCallback = (data: any) => {
   }
 }
 
-// 表格列配置（仅保留需求字段：商品名称、价格、销量、库存、状态、操作）
+// 表格列配置
 const columns: ColumnProps[] = [
   { type: 'selection', fixed: 'left', width: 60 },
   {
     prop: 'name',
     label: '商品名称',
     minWidth: 120,
-    search: { el: 'input' } // 商品名称搜索
+    search: { el: 'input' }
   },
   {
     prop: 'price',
@@ -106,7 +93,6 @@ const columns: ColumnProps[] = [
     minWidth: 120,
     enum: Object.values(ProductStatusList),
     search: {
-      // 商品状态搜索
       el: 'select'
     },
     formatter: (row: any) => {
@@ -130,20 +116,20 @@ const openDrawer = (title: string, row: Partial<any> = {}) => {
     row: { ...row },
     isView: title === '查看',
     api: ProductApi.saveOrEdit,
-    getTableList: proTable.value.getTableList,
+    getTableList: ProTable.value.getTableList,
     maxHeight: '300px'
   }
   dialogRef.value.acceptParams(params)
 }
 
 // 打开定时上下架弹窗
-const openStateDialog = ({ title, row }: { title: string; row: Partial<any> }) => {
+const openStateDialog = (title: string, row: Partial<any> = {}) => {
   let params = {
     title,
     row: { ...row },
-    isView: title === '查看',
+    isView: false,
     api: ProductApi.saveOrEdit,
-    getTableList: proTable.value.getTableList,
+    getTableList: ProTable.value.getTableList,
     maxHeight: '150px'
   }
   stateDialogRef.value.acceptParams(params)

@@ -5,14 +5,14 @@
     :fullscreen="dialogProps.fullscreen"
     :max-height="dialogProps.maxHeight"
     :cancel-dialog="cancelDialog"
-    width="70%"
-    top="8vh"
+    width="80%"
+    top="7vh"
   >
-    <CustomerManage :is-show-header="false" ref="customerManageRef" />
+    <ProductManage :is-show-header="false" ref="productManageRef" :status="1" />
     <template #footer>
       <slot name="footer">
         <el-button @click="cancelDialog">取消</el-button>
-        <el-button type="primary" @click="getCustomerData()">确定</el-button>
+        <el-button type="primary" @click="getProductData()">确定</el-button>
       </slot>
     </template>
   </Dialog>
@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Dialog } from '@/components/Dialog'
-import CustomerManage from '@/views/Customer/CustomerManage.vue'
+import ProductManage from '@/views/Product/ProductManage.vue'
 import { ElMessage } from 'element-plus'
 
 interface DialogProps {
@@ -35,7 +35,7 @@ interface DialogProps {
   getTableList?: () => Promise<any>
 }
 
-const customerManageRef = ref()
+const productManageRef = ref()
 
 const dialogVisible = ref(false)
 const dialogProps = ref<DialogProps>({
@@ -47,7 +47,6 @@ const dialogProps = ref<DialogProps>({
   maxHeight: '500px'
 })
 
-// 接收父组件传过来的参数
 const acceptParams = (params: DialogProps): void => {
   params.row = { ...dialogProps.value.row, ...params.row }
   dialogProps.value = { ...dialogProps.value, ...params }
@@ -62,18 +61,26 @@ const cancelDialog = () => {
   dialogVisible.value = false
 }
 
-const emit = defineEmits(['getCustomerData'])
-const getCustomerData = () => {
-  console.log(customerManageRef.value.proTable)
-  if (customerManageRef.value.proTable.selectedListIds.length > 1) {
-    ElMessage.error({ message: `只能选择一个客户` })
-  } else if (customerManageRef.value.proTable.selectedListIds.length === 1) {
+const emit = defineEmits(['getProductData'])
+const getProductData = () => {
+  if (!productManageRef.value || !productManageRef.value.proTable) {
+    ElMessage.error('商品列表未加载完成')
+    return
+  }
+  const selectedListIds = productManageRef.value.proTable.selectedListIds || []
+  const selectedList = productManageRef.value.proTable.selectedList || []
+  if (selectedListIds.length > 1) {
+    ElMessage.error('只能选择一个商品')
+  } else if (selectedListIds.length === 1) {
     const param = {
-      id: customerManageRef.value.proTable.selectedListIds[0],
-      name: customerManageRef.value.proTable.selectedList[0].name
+      id: selectedListIds[0],
+      name: selectedList[0].name,
+      price: selectedList[0].price
     }
-    emit('getCustomerData', param)
+    emit('getProductData', param)
     dialogVisible.value = false
+  } else {
+    ElMessage.warning('请选择一个商品')
   }
 }
 </script>

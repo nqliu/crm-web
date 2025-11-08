@@ -17,34 +17,33 @@
         :disabled="dialogProps.isView"
         :hide-required-asterisk="dialogProps.isView"
       >
-        <el-form-item label="商品名称" prop="name">
-          <el-input v-model="dialogProps.row!.name" placeholder="请填写商品名称" clearable maxlength="50" show-word-limit></el-input>
+        <el-form-item label="线索名称" prop="name">
+          <el-input v-model="dialogProps.row!.name" placeholder="请填写线索名称" clearable maxlength="50" show-word-limit :readonly="true"></el-input>
         </el-form-item>
-        <div class="flex">
-          <el-form-item label="商品价格" prop="price">
-            <el-input v-model="dialogProps.row!.price" placeholder="请填写商品价格" type="number" clearable maxlength="10" show-word-limit></el-input>
-          </el-form-item>
-          <el-form-item label="商品库存" prop="stock">
-            <el-input v-model="dialogProps.row!.stock" placeholder="请填写商品库存" clearable maxlength="100" show-word-limit></el-input>
-          </el-form-item>
-        </div>
-        <el-form-item label="商品状态" prop="status">
-          <el-select v-model="dialogProps.row!.status" filterable placeholder="请选择商品状态" class="w-full">
-            <el-option v-for="item in Object.values(ProductStatusList)" :key="item.value" :label="item.label" :value="item.value" class="isabel-option" />
+        <el-form-item label="线索手机号" prop="phone">
+          <el-input v-model="dialogProps.row!.phone" placeholder="请填写线索手机号" clearable maxlength="11" show-word-limit :readonly="true"></el-input>
+        </el-form-item>
+        <el-form-item label="线索等级" prop="level">
+          <el-select v-model="dialogProps.row!.level" filterable placeholder="请选择线索等级" class="w-full" :disabled="true">
+            <el-option v-for="item in Object.values(CustomerLevelList)" :key="item.value" :label="item.label" :value="item.value" class="isabel-option" />
           </el-select>
         </el-form-item>
-        <el-form-item label="商品封面图" prop="coverImage">
-          <UploadImg v-model:image-url="dialogProps.row!.coverImage" width="135px" height="135px" :file-size="5">
-            <template #empty>
-              <el-icon>
-                <Avatar />
-              </el-icon>
-              <span>请上传商品封面图</span>
-            </template>
-          </UploadImg>
+        <el-form-item label="跟进方式" prop="followType">
+          <el-select v-model="dialogProps.row!.followType" filterable placeholder="请选择跟进方式" class="w-full">
+            <el-option v-for="item in Object.values(FollowUpMethodList)" :key="item.value" :label="item.label" :value="item.value" class="isabel-option" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="商品简介" prop="description">
-          <el-input v-model="dialogProps.row!.description" placeholder="请填写商品简介" clearable maxlength="100" show-word-limit type="textarea"></el-input>
+        <el-form-item label="下次跟进时间" prop="nextFollowType">
+          <el-date-picker
+            v-model="dialogProps.row.nextFollowType"
+            type="datetime"
+            :placeholder="`请选择下次跟进时间`"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            :disabled-date="(time) => time.getTime() < Date.now() - 8.64e7"
+          />
+        </el-form-item>
+        <el-form-item label="跟进内容" prop="content">
+          <el-input v-model="dialogProps.row!.content" clearable type="textarea" maxlength="100" show-word-limit></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -61,8 +60,7 @@
 import { ref, reactive } from 'vue'
 import { ElMessage, FormInstance } from 'element-plus'
 import { Dialog } from '@/components/Dialog'
-import { ProductStatusList } from '@/configs/enum'
-import UploadImg from '@/components/Upload/Img.vue'
+import { CustomerLevelList, FollowUpMethodList } from '@/configs/enum'
 interface DialogProps {
   title: string
   isView: boolean
@@ -78,7 +76,7 @@ const dialogProps = ref<DialogProps>({
   isView: false,
   title: '',
   row: {},
-  labelWidth: 120,
+  labelWidth: 160,
   fullscreen: false,
   maxHeight: '500px'
 })
@@ -94,33 +92,9 @@ defineExpose({
   acceptParams
 })
 const rules = reactive({
-  name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
-  price: [
-    { required: true, message: '请输入商品价格', trigger: 'blur' },
-    {
-      pattern: /^\d+(\.\d{1,2})?$/,
-      message: '商品价格最多小数点后两位',
-      trigger: 'blur'
-    }
-  ],
-  stock: [
-    { required: true, message: '请输入商品库存数量', trigger: 'blur' },
-    {
-      validator: (rule, value, callback) => {
-        const num = Number(value)
-        if (isNaN(num)) {
-          callback(new Error('请输入数字'))
-        } else if (num < 0) {
-          callback(new Error('商品库存不能小于0'))
-        } else {
-          callback()
-        }
-      },
-      trigger: 'blur'
-    }
-  ],
-  status: [{ required: true, message: '请选择商品状态', trigger: 'blur' }],
-  coverImage: [{ required: true, message: '请上传商品封面图', trigger: 'blur' }]
+  followType: [{ required: true, message: '跟进方式不能为空', trigger: 'blur' }],
+  nextFollowType: [{ required: true, message: '下次跟进时间不能为空', trigger: 'blur' }],
+  content: [{ required: true, message: '跟进内容不能为空', trigger: 'blur' }]
 })
 
 const ruleFormRef = ref<FormInstance>()
