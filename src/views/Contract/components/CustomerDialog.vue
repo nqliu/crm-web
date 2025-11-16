@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Dialog } from '@/components/Dialog'
-import CustomerManage from '@/views/Customer/CustomerManage.vue'
+import CustomerManage from '@/views/Customer/CustomerManager.vue'
 import { ElMessage } from 'element-plus'
 
 interface DialogProps {
