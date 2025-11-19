@@ -150,3 +150,28 @@ export interface TradeArray {
   timeList: string[]
   countList: number[] // 移除可选符，确保必须有该字段
 }
+// src/api/interface/index.ts（补充以下内容）
+export interface DashboardStatistics {
+  newCustomerCount: number
+  customerChange: number
+  newLeadCount: number
+  leadChange: number
+  newContractCount: number
+  contractChange: number
+  contractAmount: number
+  amountChange: number
+}
+
+export interface DashboardTrend {
+  dates: string[]
+  customerData: number[]
+  leadData: number[]
+  contractData: number[]
+}
+
+export interface DashboardResponse extends IResponse {
+  data: {
+    statistics: DashboardStatistics
+    trend: DashboardTrend
+  }
+}

@@ -19,6 +19,7 @@
         <el-button type="primary" link :icon="EditPen" @click="openDrawer('编辑', scope.row)">编辑</el-button>
         <el-button type="primary" link :icon="Printer" @click="handleContractPrint(scope.row)">打印</el-button>
         <!-- <el-button type="danger" link :icon="Delete" @click="deleteContract(scope.row)">删除</el-button> -->
+        <el-button type="info" link :icon="Share" v-hasPermi="['sys:contract:audit']" v-if="scope.row.status === 0" @click="startApproval(scope.row)">审核</el-button>
       </template>
     </ProTable>
   </div>
@@ -36,6 +37,8 @@ import printJS from 'print-js'
 import ContractDialog from './components/ContractDialog.vue'
 import { ElMessage } from 'element-plus'
 import { ContractStatusList } from '@/configs/enum'
+import { useHandleData } from '@/hooks/useHandleData'
+import { Share } from '@element-plus/icons-vue'
 
 const proTable = ref()
 const dialogRef = ref()
@@ -253,4 +256,9 @@ const handleContractPrint = async (contractRow: any) => {
 //   await useHandleData(ContractApi.remove, { id: params.id }, `删除合同【${params.name}】`)
 //   proTable.value.getTableList()
 // }
+//开始审核合同
+const startApproval = async (row: any) => {
+  await useHandleData(ContractApi.startApproval, { id: row.id }, `发起合同审核`)
+  proTable.value.getTableList()
+}
 </script>
