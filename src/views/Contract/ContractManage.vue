@@ -31,14 +31,13 @@ import { ref, reactive } from 'vue'
 import { ColumnProps } from '@/components/ProTable/interface'
 import ProTable from '@/components/ProTable/index.vue'
 import { ContractApi } from '@/api/modules/contract'
-import { CirclePlus, EditPen, Printer } from '@element-plus/icons-vue'
+import { CirclePlus, EditPen, Printer, Share } from '@element-plus/icons-vue'
 // import { useHandleData } from '@/hooks/useHandleData'
 import printJS from 'print-js'
 import ContractDialog from './components/ContractDialog.vue'
 import { ElMessage } from 'element-plus'
 import { ContractStatusList } from '@/configs/enum'
 import { useHandleData } from '@/hooks/useHandleData'
-import { Share } from '@element-plus/icons-vue'
 
 const proTable = ref()
 const dialogRef = ref()

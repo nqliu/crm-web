@@ -50,6 +50,9 @@
             <el-radio :label="0" border>停用</el-radio>
           </el-radio-group>
         </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="dialogProps.row.email" placeholder="请输入邮箱" clearable></el-input>
+        </el-form-item>
       </el-form>
     </div>
     <template #footer>
@@ -150,7 +153,11 @@ const rules = reactive({
   ],
   roleId: [{ required: true, message: '请选择角色', trigger: 'change' }],
   status: [{ required: true, message: '请选择状态', trigger: 'change' }],
-  type: [{ required: true, message: '请选择账号类型', trigger: 'change' }]
+  type: [{ required: true, message: '请选择账号类型', trigger: 'change' }],
+  email: [
+    { required: true, message: '请输入邮箱', trigger: 'blur' },
+    { type: 'email', message: '请输入正确的邮箱格式', trigger: ['blur', 'change'] }
+  ]
 })
 const ruleFormRef = ref<FormInstance>()
 const handleSubmit = () => {

@@ -160,6 +160,8 @@ export interface DashboardStatistics {
   contractChange: number
   contractAmount: number
   amountChange: number
+  todayApprovedCount: number  
+  todayRejectedCount: number  
 }
 
 export interface DashboardTrend {

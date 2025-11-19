@@ -18,6 +18,10 @@
           color="#f53f3f"
           :isAmount="true"
         />
+        <!-- 今日审核通过卡片 -->
+        <StatisticsCard title="今日审核通过" :value="statisticsData.todayApprovedCount" icon="Check" color="#00b42a" :change="0" />
+        <!-- 今日审核拒绝卡片 -->
+        <StatisticsCard title="今日审核拒绝" :value="statisticsData.todayRejectedCount" icon="Close" color="#f53f3f" :change="0" />
       </div>
     </div>
 
@@ -47,13 +51,19 @@ const statisticsData = ref<DashboardStatistics>({
   newContractCount: 0,
   contractChange: 0,
   contractAmount: 0,
-  amountChange: 0
+  amountChange: 0,
+  todayApprovedCount: 0,
+  todayRejectedCount: 0,
+  approvedContractChange: 0,
+  rejectedContractChange: 0
 })
 const trendData = ref<DashboardTrend>({
   dates: [],
   customerData: [],
   leadData: [],
-  contractData: []
+  contractData: [],
+  approvedData: [],
+  rejectedData: []
 })
 
 const formatCurrency = (value: number) => `¥${value.toFixed(2)}`

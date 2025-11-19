@@ -13,6 +13,10 @@ export interface DashboardStatistics {
   contractChange: number
   contractAmount: number
   amountChange: number
+  todayApprovedCount: number
+  todayRejectedCount: number
+  approvedContractChange: number
+  rejectedContractChange: number
 }
 
 export interface DashboardTrend {
@@ -20,6 +24,8 @@ export interface DashboardTrend {
   customerData: number[]
   leadData: number[]
   contractData: number[]
+  approvedData: number[]
+  rejectedData: number[]
 }
 
 export interface DashboardResponse {

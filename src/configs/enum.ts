@@ -45,10 +45,18 @@ export enum IsKeyDecisionMaker {
 }
 
 export enum ContractStatus {
-  INITIALIZING,
-  UNDER_REVIEW,
-  APPROVED,
-  REJECTED
+  INITIALIZING = 0,
+  UNDER_REVIEW = 1,
+  APPROVED = 2,
+  REJECTED = 3
+}
+
+export enum ApprovalStatus {
+  DRAFT = 0,
+  SUBMITTED = 1,
+  IN_PROGRESS = 2,
+  COMPLETED = 3,
+  REJECTED = 4
 }
 
 export enum LeadStatus {
@@ -117,12 +125,12 @@ export const ProductStatusList: { [key in ProductStatus]: EnumInfo } = {
   [ProductStatus.OFFLINE]: { value: 2, label: '下架' }
 }
 
-export const ContractStatusList: { [key in ContractStatus]: EnumInfo } = {
-  [ContractStatus.INITIALIZING]: { value: 0, label: '初始化' },
-  [ContractStatus.UNDER_REVIEW]: { value: 1, label: '审核中' },
-  [ContractStatus.APPROVED]: { value: 2, label: '审核通过' },
-  [ContractStatus.REJECTED]: { value: 3, label: '审核未通过' }
-}
+export const ContractStatusList = [
+  { value: ContractStatus.INITIALIZING, label: '初始化' },
+  { value: ContractStatus.UNDER_REVIEW, label: '审核中' },
+  { value: ContractStatus.APPROVED, label: '已通过' },
+  { value: ContractStatus.REJECTED, label: '已拒绝' }
+]
 
 export const LeadStatusList: { [key in LeadStatus]: EnumInfo } = {
   [LeadStatus.NOT_CONVERTED]: { value: 0, label: '未转化成客户' },

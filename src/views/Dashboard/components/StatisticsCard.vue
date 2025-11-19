@@ -23,9 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import { CaretTop, CaretBottom } from '@element-plus/icons-vue'
-import { User, Search, Document, Money } from '@element-plus/icons-vue'
-
 const _props = defineProps({
   title: {
     type: String,
@@ -52,14 +49,6 @@ const _props = defineProps({
     default: false
   }
 })
-
-// 注册图标组件
-const _components = {
-  User,
-  Search,
-  Document,
-  Money
-}
 </script>
 
 <style scoped>
