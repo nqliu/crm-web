@@ -116,10 +116,15 @@ const handleClean = async () => {
 const columns: ColumnProps<SysOperLog.ResOperLogList>[] = [
   { type: 'selection', fixed: 'left', width: 60 },
   {
+    prop: 'id',
+    label: '日志ID',
+    width: 80,
+    align: 'center'
+  },
+  {
     prop: 'title',
     label: '模块标题',
-    search: { el: 'input' },
-    width: 150
+    search: { el: 'input' }
   },
   {
     prop: 'operType',
@@ -138,7 +143,7 @@ const columns: ColumnProps<SysOperLog.ResOperLogList>[] = [
     render: (scope) => {
       const operType = scope.row.operType
       if (operType === 0) {
-        return h(ElTag, '其它')
+        return h(ElTag, '其它') // 修正组件名
       } else if (operType === 1) {
         return h(ElTag, { type: 'success' }, '新增')
       } else if (operType === 2) {
@@ -155,30 +160,33 @@ const columns: ColumnProps<SysOperLog.ResOperLogList>[] = [
     }
   },
   {
-    prop: 'operUrl',
-    label: '请求URL',
-    search: { el: 'input' },
-    width: 200
+    prop: 'operName',
+    label: '操作人',
+    search: { el: 'input' }
+  },
+  {
+    prop: 'operTime',
+    label: '操作时间',
+    width: 200,
+    search: {
+      el: 'date-picker',
+      type: 'datetimerange',
+      format: 'YYYY-MM-DD HH:mm:ss',
+      valueFormat: 'YYYY-MM-DD HH:mm:ss'
+    }
   },
   {
     prop: 'operIp',
     label: '主机地址',
-    search: { el: 'input' },
-    width: 150
+    search: { el: 'input' }
   },
   {
     prop: 'operLocation',
-    label: '操作地点',
-    search: { el: 'input' }
-  },
-  {
-    prop: 'operName',
-    label: '操作人员',
-    search: { el: 'input' }
+    label: '操作地点'
   },
   {
     prop: 'status',
-    label: '操作状态',
+    label: '状态',
     search: {
       el: 'select',
       options: [
@@ -187,27 +195,13 @@ const columns: ColumnProps<SysOperLog.ResOperLogList>[] = [
       ]
     },
     render: (scope) => {
-      return scope.row.status === 0 ? h(ElTag, { type: 'success' }, '成功') : h(ElTag, { type: 'danger' }, '异常')
+      return scope.row.status === 0 ? h(ElTag, { type: 'success' }, '正常') : h(ElTag, { type: 'danger' }, scope.row.errorMsg || '异常')
     }
   },
   {
-    prop: 'requestMethod',
-    label: '请求方法',
-    search: {
-      el: 'select',
-      options: [
-        { label: 'GET', value: 'GET' },
-        { label: 'POST', value: 'POST' },
-        { label: 'PUT', value: 'PUT' },
-        { label: 'DELETE', value: 'DELETE' }
-      ]
-    }
-  },
-  {
-    prop: 'operTime',
-    label: '操作时间',
-    search: { el: 'date-picker', props: { type: 'datetimerange' }, span: 3 },
-    width: 200
+    prop: 'costTime',
+    label: '耗时(ms)',
+    width: 100
   },
   {
     prop: 'operation',

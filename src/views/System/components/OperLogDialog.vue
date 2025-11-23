@@ -15,7 +15,7 @@
         </el-descriptions-item>
         <el-descriptions-item label="操作人">{{ logInfo.operName }}</el-descriptions-item>
         <el-descriptions-item label="操作时间">{{ logInfo.operTime }}</el-descriptions-item>
-        <el-descriptions-item label="操作IP">{{ logInfo.operIp }}</el-descriptions-item>
+        <el-descriptions-item label="主机地址">{{ logInfo.operIp }}</el-descriptions-item>
         <el-descriptions-item label="操作地点">{{ logInfo.operLocation }}</el-descriptions-item>
         <el-descriptions-item label="操作状态">
           <el-tag v-if="logInfo.status === 0" type="success">正常</el-tag>
